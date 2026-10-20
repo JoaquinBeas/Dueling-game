@@ -39,6 +39,36 @@ Las fases van en orden; cada una se cierra antes de empezar la siguiente.
 - [ ] Integrar los 6 personajes con movimientos propios y equilibrarlos.
 - [ ] Pulido final.
 
+## Probar la cámara (Fase 1)
+
+Requisitos: Unreal Engine 5.5 o superior con soporte de C++ (Visual Studio 2022 en Windows). El proyecto está asociado a 5.5; si usas otra versión, clic derecho en `DuelingGame.uproject` → *Switch Unreal Engine version*.
+
+1. Abre `DuelingGame.uproject` y acepta compilar el módulo `DuelingGame`.
+2. Pulsa **Play**. El modo de juego crea solo la arena gris, tu personaje (azul) y un rival de prueba (rojo) que te rodea, se acerca, te cruza por la espalda y se aleja. Funciona en cualquier nivel vacío.
+
+| Acción | Teclado y ratón | Mando |
+| --- | --- | --- |
+| Mover | WASD | Stick izquierdo |
+| Cámara | Ratón | Stick derecho |
+| Zoom | Rueda | Cruceta arriba/abajo |
+| Ataque ligero / pesado | Clic izquierdo / derecho | X / Y |
+| Esquiva | Espacio | A |
+| Lock-on | Tab o clic de rueda | R3 |
+| Asistencia de encuadre on/off | 1 | |
+| Pausar al rival | 2 | |
+| Ocultar la ayuda | 3 | |
+
+El HUD muestra la longitud del brazo, la distancia al rival y el **porcentaje de tiempo con el rival en pantalla**, que es la métrica para validar el encuadre. Cuando el rival sale del encuadre aparece una flecha roja en el borde.
+
+**Ajustes de la cámara:** todos están en [`Config/DefaultGame.ini`](Config/DefaultGame.ini), comentados (encuadre, zoom, encuadre de combate, asistencia, lock-on, efectos y shake). Al cambiarlos hay que reiniciar el editor. Para probar valores en caliente: durante el Play, `F8` para soltar el ratón, selecciona el personaje y edita el componente `DuelCamera` en *Details*.
+
+Código principal:
+
+- `Source/DuelingGame/Camera/DuelCameraComponent`: la cámara (Spring Arm, zoom, encuadre de combate, asistencia, lock-on, momentos de cine).
+- `Source/DuelingGame/Camera/DuelPlayerCameraManager`: shake de impacto.
+- `Source/DuelingGame/Player/DuelCharacter`: personaje placeholder, controles y ataques de prueba que salen hacia donde mira la cámara.
+- `Source/DuelingGame/Test/`: arena, rival y HUD de prueba (se retirarán al tener la arena y la IA reales).
+
 ## Puesta en marcha
 
 Este repositorio usa **Git LFS** para los assets binarios (`.uasset`, `.umap`, texturas, audio, modelos...). Antes de clonar:
