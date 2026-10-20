@@ -1,0 +1,69 @@
+# ---------------------------------------------------------------
+# Unreal Engine
+# ---------------------------------------------------------------
+
+# Carpetas generadas por el motor
+Binaries/
+Build/*
+!Build/**/*.ico
+DerivedDataCache/
+Intermediate/
+Saved/
+
+# Igual para cada plugin del proyecto
+Plugins/**/Binaries/
+Plugins/**/Intermediate/
+
+# Proyectos y soluciones generados
+*.sln
+*.suo
+*.sdf
+*.VC.db
+*.VC.opendb
+*.opensdf
+*.xcodeproj
+*.xcworkspace
+.vs/
+.vscode/
+.idea/
+*.code-workspace
+compile_commands.json
+
+# Artefactos de compilación
+*.obj
+*.o
+*.pdb
+*.dll
+*.lib
+*.a
+*.exp
+*.ilk
+*.exe
+*.app
+*.dylib
+*.so
+*.ipa
+*.apk
+*.target
+*.modules
+
+# Contenido cocinado / empaquetado
+*.pak
+*.ucas
+*.utoc
+Cooked/
+Packaged/
+StagedBuilds/
+
+# Archivos de autoguardado y caché
+*.tmp
+*.log
+*.uasset.bak
+*.umap.bak
+
+# ---------------------------------------------------------------
+# Sistema operativo
+# ---------------------------------------------------------------
+.DS_Store
+Thumbs.db
+Desktop.ini
