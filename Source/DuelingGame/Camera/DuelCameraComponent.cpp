@@ -63,6 +63,9 @@ void UDuelCameraComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 		bInitialPitchApplied = true;
 	}
 
+	// El desplazamiento va al final del brazo, en el espacio de la cámara: mueve sin rotar.
+	SpringArm->SocketOffset = SocketOffset + FVector(0.f, PanOffset.X, PanOffset.Y);
+
 	FindOpponentIfNeeded(DeltaTime);
 	UpdateRotation(PC, DeltaTime);
 	UpdateArmLength(DeltaTime);
@@ -97,6 +100,17 @@ void UDuelCameraComponent::AddLookInput(const FVector2D& DeltaDegrees)
 void UDuelCameraComponent::AddZoomInput(float Steps)
 {
 	UserArmLength = FMath::Clamp(UserArmLength + Steps * ZoomStep, MinArmLength, MaxArmLength);
+}
+
+void UDuelCameraComponent::AddPanInput(const FVector2D& Direction, float DeltaTime)
+{
+	PanOffset.X = FMath::Clamp(static_cast<float>(PanOffset.X + Direction.X * PanSpeed * DeltaTime), -MaxPanSide, MaxPanSide);
+	PanOffset.Y = FMath::Clamp(static_cast<float>(PanOffset.Y + Direction.Y * PanSpeed * DeltaTime), MinPanUp, MaxPanUp);
+}
+
+void UDuelCameraComponent::ResetPan()
+{
+	PanOffset = FVector2D::ZeroVector;
 }
 
 void UDuelCameraComponent::ToggleLockOn()

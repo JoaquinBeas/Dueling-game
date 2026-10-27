@@ -7,6 +7,7 @@
 #include "Components/StaticMeshComponent.h"
 #include "DrawDebugHelpers.h"
 #include "DuelingGame.h"
+#include "Engine/LocalPlayer.h"
 #include "Engine/OverlapResult.h"
 #include "Engine/StaticMesh.h"
 #include "Engine/World.h"
@@ -22,6 +23,7 @@
 #include "InputTriggers.h"
 #include "Materials/MaterialInstanceDynamic.h"
 #include "Test/DuelDebugHUD.h"
+#include "Test/DuelMannequin.h"
 #include "Test/DuelTestDummy.h"
 #include "UObject/ConstructorHelpers.h"
 
@@ -107,7 +109,12 @@ void ADuelCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if (UMaterialInstanceDynamic* Material = BodyMesh->CreateDynamicMaterialInstance(0))
+	if (DuelMannequin::Apply(this, MannequinMesh, MannequinAnimClass))
+	{
+		BodyMesh->SetHiddenInGame(true);
+		FacingMesh->SetHiddenInGame(true);
+	}
+	else if (UMaterialInstanceDynamic* Material = BodyMesh->CreateDynamicMaterialInstance(0))
 	{
 		Material->SetVectorParameterValue(TEXT("Color"), FLinearColor(0.1f, 0.35f, 0.9f));
 	}
@@ -149,6 +156,8 @@ void ADuelCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	Input->BindAction(LookMouseAction, ETriggerEvent::Triggered, this, &ADuelCharacter::LookMouse);
 	Input->BindAction(LookStickAction, ETriggerEvent::Triggered, this, &ADuelCharacter::LookStick);
 	Input->BindAction(ZoomAction, ETriggerEvent::Triggered, this, &ADuelCharacter::Zoom);
+	Input->BindAction(PanAction, ETriggerEvent::Triggered, this, &ADuelCharacter::PanCamera);
+	Input->BindAction(ResetPanAction, ETriggerEvent::Started, this, &ADuelCharacter::ResetCameraPan);
 	Input->BindAction(LightAttackAction, ETriggerEvent::Started, this, &ADuelCharacter::LightAttack);
 	Input->BindAction(HeavyAttackAction, ETriggerEvent::Started, this, &ADuelCharacter::HeavyAttack);
 	Input->BindAction(DodgeAction, ETriggerEvent::Started, this, &ADuelCharacter::Dodge);
@@ -176,6 +185,8 @@ void ADuelCharacter::CreateInput()
 	LookMouseAction = MakeAction(TEXT("IA_LookMouse"), EInputActionValueType::Axis2D);
 	LookStickAction = MakeAction(TEXT("IA_LookStick"), EInputActionValueType::Axis2D);
 	ZoomAction = MakeAction(TEXT("IA_Zoom"), EInputActionValueType::Axis1D);
+	PanAction = MakeAction(TEXT("IA_PanCamera"), EInputActionValueType::Axis2D);
+	ResetPanAction = MakeAction(TEXT("IA_ResetCameraPan"), EInputActionValueType::Boolean);
 	LightAttackAction = MakeAction(TEXT("IA_LightAttack"), EInputActionValueType::Boolean);
 	HeavyAttackAction = MakeAction(TEXT("IA_HeavyAttack"), EInputActionValueType::Boolean);
 	DodgeAction = MakeAction(TEXT("IA_Dodge"), EInputActionValueType::Boolean);
@@ -215,6 +226,17 @@ void ADuelCharacter::CreateInput()
 		Mapping.Modifiers.Add(Negate());
 		Mapping.Triggers.Add(Pressed());
 	}
+
+	// Flechas: desplazan la cámara sobre sus ejes, sin rotarla. Inicio la recentra.
+	Context->MapKey(PanAction, EKeys::Right);
+	Context->MapKey(PanAction, EKeys::Left).Modifiers.Add(Negate());
+	Context->MapKey(PanAction, EKeys::Up).Modifiers.Add(Swizzle());
+	{
+		FEnhancedActionKeyMapping& Mapping = Context->MapKey(PanAction, EKeys::Down);
+		Mapping.Modifiers.Add(Swizzle());
+		Mapping.Modifiers.Add(Negate());
+	}
+	Context->MapKey(ResetPanAction, EKeys::Home);
 
 	Context->MapKey(LightAttackAction, EKeys::LeftMouseButton);
 	Context->MapKey(LightAttackAction, EKeys::Gamepad_FaceButton_Left);
@@ -263,6 +285,16 @@ void ADuelCharacter::LookMouse(const FInputActionValue& Value)
 void ADuelCharacter::LookStick(const FInputActionValue& Value)
 {
 	DuelCamera->AddLookInput(Value.Get<FVector2D>() * StickLookSpeed * GetWorld()->GetDeltaSeconds());
+}
+
+void ADuelCharacter::PanCamera(const FInputActionValue& Value)
+{
+	DuelCamera->AddPanInput(Value.Get<FVector2D>(), GetWorld()->GetDeltaSeconds());
+}
+
+void ADuelCharacter::ResetCameraPan(const FInputActionValue& Value)
+{
+	DuelCamera->ResetPan();
 }
 
 void ADuelCharacter::Zoom(const FInputActionValue& Value)
