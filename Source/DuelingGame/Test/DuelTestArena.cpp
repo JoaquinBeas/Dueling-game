@@ -99,7 +99,7 @@ void ADuelTestArena::SpawnLightingIfMissing()
 		if (ASkyLight* Sky = World->SpawnActorDeferred<ASkyLight>(ASkyLight::StaticClass(), SkyTransform))
 		{
 			USkyLightComponent* SkyLight = Sky->GetLightComponent();
-			SkyLight->Mobility = EComponentMobility::Movable;
+			SkyLight->SetMobility(EComponentMobility::Movable);
 			SkyLight->bRealTimeCapture = true;
 			Sky->FinishSpawning(SkyTransform);
 		}

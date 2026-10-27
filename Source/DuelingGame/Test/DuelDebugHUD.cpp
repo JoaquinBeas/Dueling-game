@@ -4,6 +4,7 @@
 #include "Engine/Canvas.h"
 #include "Engine/Engine.h"
 #include "Engine/Font.h"
+#include "Engine/World.h"
 #include "GameFramework/PlayerController.h"
 #include "Player/DuelCharacter.h"
 #include "Test/DuelTestDummy.h"
