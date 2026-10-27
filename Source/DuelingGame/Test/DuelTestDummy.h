@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "UObject/SoftObjectPath.h"
 #include "DuelTestDummy.generated.h"
 
 class UStaticMeshComponent;
@@ -34,6 +35,13 @@ public:
 	void TogglePaused() { bPaused = !bPaused; }
 	bool IsPaused() const { return bPaused; }
 	EDuelDummyMode GetMode() const { return Mode; }
+
+	/** Malla y animación del maniquí (Quinn, para distinguirlo del jugador). */
+	UPROPERTY(Config, EditAnywhere, Category="Duel|Visual")
+	FSoftObjectPath MannequinMesh;
+
+	UPROPERTY(Config, EditAnywhere, Category="Duel|Visual")
+	FSoftClassPath MannequinAnimClass;
 
 	UPROPERTY(Config, EditAnywhere, Category="Duel|Test Dummy")
 	float OrbitRadius = 400.f;

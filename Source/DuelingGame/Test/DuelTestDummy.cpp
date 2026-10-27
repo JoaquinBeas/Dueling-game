@@ -6,6 +6,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Materials/MaterialInstanceDynamic.h"
+#include "Test/DuelMannequin.h"
 #include "UObject/ConstructorHelpers.h"
 
 namespace
@@ -53,6 +54,12 @@ void ADuelTestDummy::BeginPlay()
 	Super::BeginPlay();
 
 	SetMode(EDuelDummyMode::Orbit);
+
+	if (DuelMannequin::Apply(this, MannequinMesh, MannequinAnimClass))
+	{
+		BodyMesh->SetHiddenInGame(true);
+		FacingMesh->SetHiddenInGame(true);
+	}
 
 	BodyMaterial = BodyMesh->CreateDynamicMaterialInstance(0);
 	if (BodyMaterial)

@@ -4,6 +4,7 @@
 #include "Engine/Canvas.h"
 #include "Engine/Engine.h"
 #include "Engine/Font.h"
+#include "Engine/World.h"
 #include "GameFramework/PlayerController.h"
 #include "Player/DuelCharacter.h"
 #include "Test/DuelTestDummy.h"
@@ -110,9 +111,10 @@ void ADuelDebugHUD::DrawHelp(float OnScreenPercent)
 
 	Line(TEXT("CAMARA DE DUELO - prueba Fase 1"), TextColor);
 	Line(TEXT("WASD mover  |  Raton camara  |  Rueda zoom"), DimTextColor);
+	Line(TEXT("Flechas: desplazar camara sin rotar  |  Inicio: recentrar"), DimTextColor);
 	Line(TEXT("Clic izq. ataque ligero  |  Clic der. ataque pesado  |  Espacio esquiva"), DimTextColor);
 	Line(FString::Printf(TEXT("Tab / clic rueda: lock-on [%s]"), OnOff(DuelCamera->IsLockOnActive())), DimTextColor);
-	Line(FString::Printf(TEXT("1: asistencia de encuadre [%s]%s"), OnOff(DuelCamera->IsAssistEnabled()),
+	Line(FString::Printf(TEXT("1: autoapuntado de camara [%s]%s"), OnOff(DuelCamera->IsAssistEnabled()),
 		DuelCamera->IsAssisting() ? TEXT("  (girando)") : TEXT("")), DimTextColor);
 	Line(FString::Printf(TEXT("2: pausar rival [%s]  |  3: ocultar esta ayuda"), OnOff(Dummy && Dummy->IsPaused())), DimTextColor);
 	Y += LineHeight * 0.5f;

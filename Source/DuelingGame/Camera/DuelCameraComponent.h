@@ -15,7 +15,7 @@ class APlayerController;
  * encima de la cabeza y ligero picado. El jugador orbita con el ratón y elige el zoom con la
  * rueda; encima de eso se suman, cada frame:
  *  - zoom extra según la distancia al rival (encuadre de combate),
- *  - asistencia suave que gira la cámara hacia el rival cuando se sale del encuadre,
+ *  - asistencia opcional que gira la cámara hacia el rival (desactivada por defecto),
  *  - lock-on duro opcional,
  *  - momentos de cine (acercamiento + FOV) y golpes de FOV en las esquivas.
  *
@@ -39,6 +39,15 @@ public:
 
 	/** Pasos de zoom: positivo aleja la cámara, negativo la acerca. */
 	void AddZoomInput(float Steps);
+
+	/**
+	 * Desplaza la cámara sobre sus ejes sin rotarla (flechas): X = derecha/izquierda,
+	 * Y = arriba/abajo. Valores en [-1, 1]; se integra con el tiempo.
+	 */
+	void AddPanInput(const FVector2D& Direction, float DeltaTime);
+
+	/** Devuelve la cámara a su posición base sobre los ejes. */
+	void ResetPan();
 
 	void ToggleLockOn();
 	void ToggleAssist();
@@ -117,6 +126,25 @@ public:
 	float ZoomInterpSpeed = 6.f;
 
 	// ---------------------------------------------------------------------------------------
+	// Desplazamiento con flechas (sobre los ejes de la cámara, sin rotar)
+	// ---------------------------------------------------------------------------------------
+
+	/** Velocidad del desplazamiento (cm por segundo). */
+	UPROPERTY(Config, EditAnywhere, Category="Duel Camera|Pan")
+	float PanSpeed = 150.f;
+
+	/** Máximo desplazamiento a cada lado (cm). */
+	UPROPERTY(Config, EditAnywhere, Category="Duel Camera|Pan")
+	float MaxPanSide = 150.f;
+
+	/** Máximo desplazamiento hacia abajo y hacia arriba respecto a la posición base (cm). */
+	UPROPERTY(Config, EditAnywhere, Category="Duel Camera|Pan")
+	float MinPanUp = -60.f;
+
+	UPROPERTY(Config, EditAnywhere, Category="Duel Camera|Pan")
+	float MaxPanUp = 150.f;
+
+	// ---------------------------------------------------------------------------------------
 	// Encuadre de combate
 	// ---------------------------------------------------------------------------------------
 
@@ -136,7 +164,7 @@ public:
 	// ---------------------------------------------------------------------------------------
 
 	UPROPERTY(Config, EditAnywhere, Category="Duel Camera|Assist")
-	bool bAssistEnabled = true;
+	bool bAssistEnabled = false;
 
 	/** Ángulo entre el centro de la cámara y el rival a partir del cual empieza a girar (grados). */
 	UPROPERTY(Config, EditAnywhere, Category="Duel Camera|Assist")
@@ -196,6 +224,7 @@ private:
 	TWeakObjectPtr<AActor> Opponent;
 
 	float UserArmLength = 350.f;
+	FVector2D PanOffset = FVector2D::ZeroVector;
 	float OpponentSearchCooldown = 0.f;
 	float LastLookInputTime = -100.f;
 	bool bLockOnActive = false;

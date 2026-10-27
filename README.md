@@ -54,7 +54,8 @@ Requisitos: Unreal Engine 5.8 con soporte de C++. En Windows, Unreal 5.8 pide el
 | Ataque ligero / pesado | Clic izquierdo / derecho | X / Y |
 | Esquiva | Espacio | A |
 | Lock-on | Tab o clic de rueda | R3 |
-| Asistencia de encuadre on/off | 1 | |
+| Desplazar la cámara sin rotarla | Flechas (Inicio recentra) | |
+| Autoapuntado de cámara on/off (apagado por defecto) | 1 | |
 | Pausar al rival | 2 | |
 | Ocultar la ayuda | 3 | |
 

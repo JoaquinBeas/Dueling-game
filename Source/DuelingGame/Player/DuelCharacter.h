@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "UObject/SoftObjectPath.h"
 #include "DuelCharacter.generated.h"
 
 class USpringArmComponent;
@@ -59,6 +60,13 @@ public:
 	UPROPERTY(Config, EditAnywhere, Category="Duel|Test Combat")
 	float HitStopTimeDilation = 0.05f;
 
+	/** Malla y animación del maniquí de Unreal. Si no están en el proyecto se usa el cilindro. */
+	UPROPERTY(Config, EditAnywhere, Category="Duel|Visual")
+	FSoftObjectPath MannequinMesh;
+
+	UPROPERTY(Config, EditAnywhere, Category="Duel|Visual")
+	FSoftClassPath MannequinAnimClass;
+
 	/** Dibuja la esfera de impacto de los ataques de prueba. */
 	UPROPERTY(Config, EditAnywhere, Category="Duel|Test Combat")
 	bool bDrawAttackDebug = true;
@@ -88,6 +96,8 @@ private:
 	void StopMove(const FInputActionValue& Value);
 	void LookMouse(const FInputActionValue& Value);
 	void LookStick(const FInputActionValue& Value);
+	void PanCamera(const FInputActionValue& Value);
+	void ResetCameraPan(const FInputActionValue& Value);
 	void Zoom(const FInputActionValue& Value);
 	void LightAttack(const FInputActionValue& Value);
 	void HeavyAttack(const FInputActionValue& Value);
@@ -118,6 +128,12 @@ private:
 
 	UPROPERTY(Transient)
 	TObjectPtr<UInputAction> ZoomAction;
+
+	UPROPERTY(Transient)
+	TObjectPtr<UInputAction> PanAction;
+
+	UPROPERTY(Transient)
+	TObjectPtr<UInputAction> ResetPanAction;
 
 	UPROPERTY(Transient)
 	TObjectPtr<UInputAction> LightAttackAction;
