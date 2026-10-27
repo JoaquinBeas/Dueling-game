@@ -41,7 +41,7 @@ Las fases van en orden; cada una se cierra antes de empezar la siguiente.
 
 ## Probar la cámara (Fase 1)
 
-Requisitos: Unreal Engine 5.5 o superior con soporte de C++ (Visual Studio 2022 en Windows). El proyecto está asociado a 5.5; si usas otra versión, clic derecho en `DuelingGame.uproject` → *Switch Unreal Engine version*.
+Requisitos: Unreal Engine 5.8 con soporte de C++. En Windows, Unreal 5.8 pide el compilador MSVC v145 (Visual Studio 2026 con «Desarrollo de escritorio con C++»); con Visual Studio 2022 puede no compilar. Si usas otra versión del motor, clic derecho en `DuelingGame.uproject` → *Switch Unreal Engine version*.
 
 1. Abre `DuelingGame.uproject` y acepta compilar el módulo `DuelingGame`.
 2. Pulsa **Play**. El modo de juego crea solo la arena gris, tu personaje (azul) y un rival de prueba (rojo) que te rodea, se acerca, te cruza por la espalda y se aleja. Funciona en cualquier nivel vacío.
